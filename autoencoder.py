@@ -11,52 +11,25 @@ import os
 
 n_inputs = 28*28
 n_hidden1 = 150
-n_hidden2 = 300
+noise_level = 1.0
 
 lr = 0.01
-n_epoch
+n_epoch =10
 batch_size = 150
 
+X = tf.placeholder(tf.float32, shape=(None,n_inputs),name="X")
+#X_noisy = X + noise_level * tf.random_normal(tf.shape(X))
+X_noisy = X
+with tf.name_scope('network'):
+    h1 = slim.fully_connected(X_noisy,150,activation_fn=tf.nn.relu)
+    outputs = slim.fully_connected(h1,28*28,activation_fn=None)
 
 
-n_epochs = 100000
-code = 100
-batch_size = 128
-n_hidden = 128
-ng_output=28*28
-nd_output=1
-lr = 0.01
-
-Z = tf.placeholder(tf.float32,shape=(None,code),name='z')
-X = tf.placeholder(tf.float32,shape=(None,ng_output),name='x')
-
-g_layers =  [(n_hidden,tf.nn.relu),(ng_output,None)]
-d_layers =  [(n_hidden,tf.nn.relu),(nd_output,None)]
-
-#gen net
-g = tf.nn.sigmoid(slim.stack(Z,slim.fully_connected,g_layers,scope='gen'))
-
-#dis net on data
-dx = slim.stack(X,slim.fully_connected,d_layers,scope='dis')
-#dis net on gen data
-dg = slim.stack(g,slim.fully_connected,d_layers,scope='dis',reuse=True)
-
-with tf.name_scope('dis_train'):
-    opt = tf.train.AdamOptimizer()
-    dloss_r = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=dx,labels=tf.ones_like(dx)))
-    dloss_f = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=dg,labels=tf.zeros_like(dg)))
-    dloss = dloss_r+dloss_f
-
-    dtrain_op = opt.minimize(dloss,var_list=tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,scope='dis'))
-with tf.name_scope('gen_train'):
-    opt = tf.train.AdamOptimizer()
-    gloss =tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=dg,labels=tf.ones_like(dg)))
-    gtrain_op = opt.minimize(gloss,var_list=tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,scope='gen'))
-
-
-
-init= tf.global_variables_initializer()
-
+with tf.name_scope('loss'):
+    loss = tf.reduce_mean(tf.square(outputs-X))
+with tf.name_scope('train'):
+    opt = tf.train.AdamOptimizer(lr)
+    train_op = opt.minimize(loss)
 
 def plot(samples):
     fig = plt.figure(figsize=(4, 4))
@@ -72,33 +45,43 @@ def plot(samples):
         plt.imshow(sample.reshape(28, 28), cmap='Greys_r')
     return fig
 
-if not os.path.exists('gan/'):
-    os.makedirs('gan/')
+if not os.path.exists('auto/'):
+    os.makedirs('auto/')
 
-def sample(batch_size,code):
-    return np.random.uniform(-1.,1.,size=[batch_size,code])
-
-mnist = input_data.read_data_sets("./MNIST")
-
-#change
 i = 0
+init = tf.global_variables_initializer()
+mnist = input_data.read_data_sets("./MNIST")
+n_test_digits = 10
 with tf.Session() as sess:
     init.run()
-    for epoch in range(n_epochs):
-        #sample
-        if epoch % 1000 == 0:
-            samples = sess.run(g,feed_dict={Z:sample(16,code)})
+    #phase1
+    for epoch in range(n_epoch):
+        n_batches = mnist.train.num_examples // batch_size
+        for iteration in range(n_batches):
+            X_batch, _ = mnist.train.next_batch(batch_size)
+            sess.run(train_op,feed_dict={X:X_batch})
+        print(sess.run(loss,feed_dict={X:X_batch}))
+        if epoch % 2 == 0:
+            X_test = mnist.test.images[:n_test_digits]
+            samples = sess.run(outputs,feed_dict={X:X_test})
             fig = plot(samples)
-            plt.savefig('gan/{}.png'.format(str(i).zfill(3)), bbox_inches='tight')
+            plt.savefig('auto/{}.png'.format(str(i).zfill(3)), bbox_inches='tight')
             i += 1
             plt.close(fig)
-        #train discriminator
-        for __ in range(10):
-            X_batch, __ = mnist.train.next_batch(bsize)
-            _,dloss_val= sess.run([dtrain_op,dloss],feed_dict={X:X_batch,Z:sample(batch_size,code)})
-        X_batch, __ = mnist.train.next_batch(bsize)
-        #train generator
-        _,gloss_val= sess.run([gtrain_op,gloss],feed_dict={Z:sample(batch_size,code)})
-        if epoch%1000 ==0:
-            print("DLoss %f" %dloss_val)
-            print("Gloss %f" %gloss_val)
+
+"""
+    n_test_digits = 10
+    X_test = mnist.test.images[:n_test_digits]
+    outputs_val = outputs.eval(feed_dict={X: X_test})
+    fig = plt.figure(figsize=(8, 3 * n_test_digits))
+    #savefig('lol.png')
+    def plot_image(image, shape=[28, 28]):
+        plt.imshow(image.reshape(shape), cmap="Greys", interpolation="nearest")
+        plt.axis("off")
+        plt.show()
+    for digit_index in range(n_test_digits):
+        plt.subplot(n_test_digits, 2, digit_index * 2 + 1)
+        #plot_image(X_test[digit_index])
+        plt.subplot(n_test_digits, 2, digit_index * 2 + 2)
+        plot_image(outputs_val[digit_index])
+"""
