@@ -54,7 +54,6 @@ mnist = input_data.read_data_sets("./MNIST")
 n_test_digits = 10
 with tf.Session() as sess:
     init.run()
-    #phase1
     for epoch in range(n_epoch):
         n_batches = mnist.train.num_examples // batch_size
         for iteration in range(n_batches):
@@ -68,20 +67,3 @@ with tf.Session() as sess:
             plt.savefig('auto/{}.png'.format(str(i).zfill(3)), bbox_inches='tight')
             i += 1
             plt.close(fig)
-
-"""
-    n_test_digits = 10
-    X_test = mnist.test.images[:n_test_digits]
-    outputs_val = outputs.eval(feed_dict={X: X_test})
-    fig = plt.figure(figsize=(8, 3 * n_test_digits))
-    #savefig('lol.png')
-    def plot_image(image, shape=[28, 28]):
-        plt.imshow(image.reshape(shape), cmap="Greys", interpolation="nearest")
-        plt.axis("off")
-        plt.show()
-    for digit_index in range(n_test_digits):
-        plt.subplot(n_test_digits, 2, digit_index * 2 + 1)
-        #plot_image(X_test[digit_index])
-        plt.subplot(n_test_digits, 2, digit_index * 2 + 2)
-        plot_image(outputs_val[digit_index])
-"""
