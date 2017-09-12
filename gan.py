@@ -81,10 +81,10 @@ with tf.Session() as sess:
             i += 1
             plt.close(fig)
         #train discriminator
-        for __ in range(10):
-            X_batch, __ = mnist.train.next_batch(bsize)
+        for __ in range(1):
+            X_batch, __ = mnist.train.next_batch(batch_size)
             _,dloss_val= sess.run([dtrain_op,dloss],feed_dict={X:X_batch,Z:sample(batch_size,code)})
-        X_batch, __ = mnist.train.next_batch(bsize)
+        X_batch, __ = mnist.train.next_batch(batch_size)
         #train generator
         _,gloss_val= sess.run([gtrain_op,gloss],feed_dict={Z:sample(batch_size,code)})
         if epoch%1000 ==0:
