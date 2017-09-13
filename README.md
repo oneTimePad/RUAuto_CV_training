@@ -36,7 +36,7 @@ Required: Python, Tensorflow and Pillow (PIL)
   
   To use it: python gan.py
   
-### Autoencoder### :
+### Autoencoder :
 
   An Autoencoder is a type of Neural Network that learns to reproduce its input at its output.  While this sounds pretty useless,
   it can be modified to do really cool things such as : generate Hashes (i.e. for Databases), generate images (VAE), reconstruct
