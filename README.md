@@ -18,7 +18,7 @@ Required: Python, Tensorflow and Pillow (PIL)
     run get_ckpy.py : python get_ckpy.py
     then run : python deep_dream.py --image_path {insert path to image you want to deep dream}
   
-### GAN (Generative Adversarial Network)###:
+### GAN (Generative Adversarial Network):
 
   A GAN is not a traditional Neural Network, it is actually a probabilistic model, unlike normal neural networks which model funtions.
   A GAN is a specific class of Differentiable Generative Networks (a probability distribution modeled by a differentiable function).
