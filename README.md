@@ -8,7 +8,7 @@ Required: Python, Tensorflow, Pillow (PIL) and MatplotLib
   can be difficult for humans to interpret, except the first few layers of the network which form edge detectors. DeepDream works by choosing a layer
   in the network and changing the raw pixels of the input image (via Gradient Descent) such that some function of the chosen layer's output 
   is maximized. The DeepDream algorithm is a little more complex than this, but this is the most important part. If you are interested
-  in seeing other ways you can visualize network weights, look into "Deconvolution" also called by its proper term "Tranposed Convolution"
+  in seeing other ways you can visualize network weights, look into "Deconvolution" also called by its proper term "Tranposed Convolution."
   You will find that the DeepDream results are a lot better.
   
   Also here is the online DeepDream generator : https://deepdreamgenerator.com/
