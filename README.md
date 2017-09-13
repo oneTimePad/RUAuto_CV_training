@@ -1,6 +1,7 @@
 # RUAuto_CV_training
 
 Required: Python, Tensorflow and Pillow (PIL)
+
 ###DeepDream:
   DeepDream is a way to visualize the weights of deep convolutional neural networks using a technique called "Optimization". Viewing the raw weights 
   can be difficult for humans to interpret, except the first few layers of the network which form edge detectors. DeepDream works by choosing a layer
