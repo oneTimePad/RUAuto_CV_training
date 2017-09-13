@@ -1,6 +1,6 @@
 # RUAuto_CV_training
 
-Required: Python, Tensorflow, Pillow (PIL) and MatplotLib
+Required: Python, Tensorflow, Pillow (PIL), Numpy, and MatplotLib
 
 ### DeepDream:
   
