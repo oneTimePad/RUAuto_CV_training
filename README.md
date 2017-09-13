@@ -2,7 +2,8 @@
 
 Required: Python, Tensorflow and Pillow (PIL)
 
-###DeepDream:
+###DeepDream###:
+  
   DeepDream is a way to visualize the weights of deep convolutional neural networks using a technique called "Optimization". Viewing the raw weights 
   can be difficult for humans to interpret, except the first few layers of the network which form edge detectors. DeepDream works by choosing a layer
   in the network and changing the raw pixels of the input image (via Gradient Descent) such that some function of the chosen layer's output 
@@ -17,7 +18,8 @@ Required: Python, Tensorflow and Pillow (PIL)
     run get_ckpy.py : python get_ckpy.py
     then run : python deep_dream.py --image_path {insert path to image you want to deep dream}
   
-###GAN (Generative Adversarial Network):
+###GAN (Generative Adversarial Network)###:
+
   A GAN is not a traditional Neural Network, it is actually a probabilistic model, unlike normal neural networks which model funtions.
   A GAN is a specific class of Differentiable Generative Networks (a probability distribution modeled by a differentiable function).
   Thus GAN's model PROBABILITY distributions and thus we can sample from them.
@@ -34,7 +36,8 @@ Required: Python, Tensorflow and Pillow (PIL)
   
   To use it: python gan.py
   
-###Autoencoder :
+###Autoencoder### :
+
   An Autoencoder is a type of Neural Network that learns to reproduce its input at its output.  While this sounds pretty useless,
   it can be modified to do really cool things such as : generate Hashes (i.e. for Databases), generate images (VAE), reconstruct
   noisy input, and compression. An Autoencoder essentially compresses its input to a lower dimension (from layers with lots of 
